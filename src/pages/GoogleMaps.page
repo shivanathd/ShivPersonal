@@ -1,5 +1,0 @@
-<apex:page standardController="Attachment">
-
-<apex:outputLink value="{!URLFOR($Action.Attachment.Download, Attachment.id)}">View</apex:outputLink> 
-
-</apex:page>

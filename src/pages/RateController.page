@@ -1,0 +1,279 @@
+<apex:page controller="cntRateController" SideBar="false">
+<head>
+	<style>
+		/*table{border: 1px solid Black;}*/
+		/*td{border: 1px solid Black;}*/
+		.headerRow{background-color:LightGray;}
+		.headerColumn{background-color:LightGray;}
+		.innerColumn{width:50px;border 1px solid black;}
+		.centeredAligned{text-align:center; height:35px;}
+		.topAligned{vertical-align: top;}
+		.smallFont{font-size:9px;}
+		.rightColumn{width:65px;}
+		.firstColumn{width:140px;}
+		.inputText{width:40px;}
+		.searchPanel{margin-left: 385px; font-weight: bold;}
+		
+	</style>
+</head>
+
+<apex:form >
+<apex:pageblock title="Rate Controller">
+<apex:pageblockbuttons >
+	<apex:commandbutton value="Save" action="{!saveRates}" />
+</apex:pageblockbuttons>
+<apex:pageBlockSection columns="1">
+	<apex:outputPanel styleclass="searchPanel">
+		Select package
+		<apex:selectList value="{!selectedPackage}" size="1">
+			<apex:selectOptions value="{!lstPackages}"/>
+		</apex:selectList>
+		<apex:commandButton value="Search" action="{!initData}"/>
+	</apex:outputPanel>
+</apex:pageBlockSection>
+<table>
+
+<apex:repeat value="{!lstRoomTypeWrappers}" var="roomType">
+	<tr class="headerRow">
+		<td colspan="9" class="centeredAligned">
+			<b>Room Type : {!roomType.roomTypeName}</b>
+		</td>
+	</tr>
+	
+	<!-- Header Row -->
+	<tr class="headerRow">
+		<td>
+			
+		</td><td class="centeredAligned">
+			<b>Sunday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			<b>Monday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			<b>Tuesday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			<b>Wednesday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			<b>Thursday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			<b>Friday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			<b>Saturday</b>
+			<br/>
+			<table>
+				<tr>
+					<td class="innerColumn">SO</td> <td class="innerColumn">HPP</td> <td class="innerColumn">EB</td>
+				</tr>
+			</table>
+		</td><td class="centeredAligned">
+			
+			<table>
+				<tr>
+					<td class="innerColumn"></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+
+	<!-- Package -->
+	<apex:repeat value="{!roomType.lstPackageWrapper}" var="package">
+		<tr>
+			<td class="headerColumn">
+				<b>{!package.packageName}</b>
+				<br/>
+				<table width="100%">
+					<apex:repeat value="{!package.addOns}" var="addOnName">
+							<tr>
+								<td class="innerColumn smallFont">*{!addOnName}</td>
+							</tr>
+					</apex:repeat>
+				</table>
+			</td>
+
+			<!-- <apex:variable value="{!0}" var="indx" />
+			<apex:repeat value="{!mapDays}" var="mpDay">			
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[indx].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[indx].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[indx].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+					<apex:variable value="{!indx+1}" var="indx" />
+				</td>
+			</apex:repeat>
+			<apex:variable value="{!0}" var="indx" /> -->
+			
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[0].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[0].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[0].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[1].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[1].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[1].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[2].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[2].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[2].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[3].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[3].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[3].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[4].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[4].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[4].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[5].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[5].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[5].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+				<td class="topAligned">
+					<table>
+						<tr>
+							<td class="innerColumn"><apex:inputField value="{!package.rates[6].Standard_Occupancy__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[6].Higher_Per_Person__c}" styleClass="inputText"/></td> <td class="innerColumn"><apex:inputField value="{!package.rates[6].Extra_Bed__c}" styleClass="inputText"/></td>
+						</tr>
+					</table>
+				</td>
+			
+			<td class="rightColumn smallFont">
+				<apex:outputpanel rendered="{!package.packageName!='Rack Rate'}">
+					<apex:inputField value="{!package.rates[0].Agent__c}"/>Agent
+					<br/><apex:inputField value="{!package.rates[0].Corporate__c}"/>Corporate
+					<br/><apex:inputField value="{!package.rates[0].Web__c}"/>Web
+				</apex:outputpanel>
+				<!-- <table width="100%">
+					<tr>
+						<td class="innerColumn smallFont" width="100%">Agent<apex:inputField value="{!package.rates[0].Agent__c}"/> </td>
+					</tr>
+					<tr>
+						<td class="innerColumn smallFont" width="100%">Corporate<apex:inputField value="{!package.rates[0].Corporate__c}"/> </td>
+					</tr>
+					<tr>
+						<td class="innerColumn smallFont" width="100%">Web<apex:inputField value="{!package.rates[0].Web__c}"/> </td>
+					</tr>
+				</table> -->
+			</td>
+			
+		</tr>
+	</apex:repeat>
+
+	<!-- Rate -->
+	<!-- <tr>
+		<td class="headerColumn">
+			Rate
+		</td><td>
+
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td>
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td>
+
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td>
+
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td>
+
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td>
+
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td>
+
+			<table>
+				<tr>
+					<td class="innerColumn"><input type="text"/></td> <td class="innerColumn"><input type="text" /></td> <td class="innerColumn"><input type="text" /></td>
+				</tr>
+			</table>
+		</td><td class="rightColumn">
+			<table>
+				<tr>
+					<td class="innerColumn"></td>
+				</tr>
+			</table>
+		</td>
+	</tr> -->
+	
+</apex:repeat>
+
+</table>
+</apex:pageblock>
+</apex:form>
+</apex:page>

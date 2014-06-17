@@ -1,0 +1,57 @@
+<apex:page standardcontroller="House_Keeping__c" sidebar="false" extensions="cntHouseKeeping">
+<style>
+	.ab{font-weight:bold}
+</style>
+<apex:form >
+    <c:ActionStatus />
+    <apex:outputpanel id="houseKeeping">
+    <apex:pageMessages id="pageMessages"/>
+     <table align="center"  border="1" cellspacing="0" cellpadding="4">
+            <tr>
+                <th>House Keeping Status</th>
+               	 <td>
+                	<apex:selectList value="{!houseKeepingStatus}" size="1">
+						<apex:selectOptions value="{!ServiceList}"/>
+					</apex:selectList>
+				</td>
+                <th>Select Room</th>
+                <td><apex:inputField value="{!objHouseFilter.Temp_Room__c}"/></td>
+                <th>Select Employee</th>
+                <td><apex:inputField value="{!objHouseFilter.Temp_Employee__c}"/></td>
+                <td><apex:commandButton value="Display" status="status" action="{!searchHouseKeeping}" rerender="houseKeeping"/></td>
+             </tr>
+    </table>
+    <hr/>
+    <center>
+      
+      	<apex:outputPanel rendered="{!if(lstWrapperHouseKeeping.size!=0,true,false)}">
+	        <table width="90%" border="1" cellspacing="0" cellpadding="4">
+	            <tr>
+	                <th width="5%">Select</th>
+	                <th width="20%">Room </th>
+	                <th width="20%">Room Type</th>
+	                <th width="20%">Status</th>
+	                <th width="20%">Remarks</th>
+	                <th width="20%">Employee Assigned</th>
+	            </tr>
+	            <apex:repeat value="{!lstWrapperHouseKeeping}" var="house">
+	                <tr bgcolor="{!house.colorCode}">
+	                    <td><apex:inputCheckbox id="selectLine1" value="{!house.isChecked}"/></td>
+	                    <td><apex:outputLabel value="{!house.roomName}"/></td>
+	                    <td><apex:outputLabel value="{!house.roomType}"/></td>
+	                    <td><apex:inputField value="{!house.objHouse.Service__c}"/></td>
+	                    <td><apex:inputField value="{!house.objHouse.Description__c}"/></td>
+	                    <td><apex:inputField value="{!house.objHouse.Temp_Employee__c}"/></td>
+	                </tr>
+	            </apex:repeat>
+	        </table>
+			<center><apex:commandButton status="status" value="Save" rerender="houseKeeping" action="{!SaveData}"/></center>
+       </apex:outputPanel>
+       <apex:outputPanel rendered="{!if(lstWrapperHouseKeeping.size!=0,false,true)}">
+       		<center>No Record found...</center>
+       </apex:outputPanel>
+    </center>
+    </apex:outputpanel>
+</apex:form>
+
+</apex:page>

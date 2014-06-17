@@ -1,0 +1,86 @@
+<apex:component >
+<style>
+    
+.waitingSearchDiv {
+left: 0;
+position: absolute;
+text-align: center;
+top: 0;
+z-index: 80;
+}
+
+.waitingSearchDiv .waitingHolder, .waitingSearchDiv .waitingSearchHolder {
+background-color: transparent;
+border: medium none;
+font-size: 1em;
+font-weight: normal;
+padding: 0;
+}
+.waitingSearchDiv .waitingHolder {
+/*background-color: #FFFFCC;
+border: 1px solid #333333;*/
+font-size: 1.2em;
+font-weight: bold;
+margin: auto;
+padding: 0.5em;
+position: relative;
+top: 45%;
+white-space: nowrap;
+width: 40%;
+}
+.waitingSearchDiv .waitingHolder .waitingImage {
+vertical-align: middle;
+}
+.waitingSearchDiv .waitingHolder .waitingImage {
+vertical-align: middle;
+}
+
+.waitingSearchDiv .waitingSearchHolder .waitingImage, .waitingSearchDiv .waitingHolder .waitingImage {
+vertical-align: bottom;
+}
+
+img {
+border: medium none;
+}
+.waitingDescription {
+color: #666666;
+font-weight: bold;
+margin-left: 6px;
+}
+ .requiredLoaderBG {
+background-color:rgb(71,71,71);
+background-image:url('/resource/1350297560000/jQueryUI/images/ui-bg_diagonals-thick_20_666666_40x40.png');
+background-position:center center; background-repeat:no-repeat;
+height:100%; left:0; top:0; position:fixed;
+opacity:0.7; filter:alpha(opacity=70);
+text-align:center; width:100%; z-index:1000;
+}
+</style>
+<apex:outputpanel >
+<apex:actionstatus id="status" startStyleClass="requiredLoaderBG">
+<apex:facet name="start">
+<div class="waitingSearchDiv" id="el_loading" style="background:URL('/resource/1350297560000/jQueryUI/images/ui-bg_diagonals-thick_20_666666_40x40.png');
+height: 100%;opacity:0.65;width:100%;">
+<!-- <div class="waitingHolder" style="top: 74.2px; width: 91px;">-->
+<div class="waitingHolder" >
+<img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+<span class="waitingDescription">Loading...</span>
+</div>
+</div>
+</apex:facet>
+</apex:actionstatus>
+</apex:outputpanel>
+<apex:outputpanel >
+<apex:actionstatus id="status2">
+<apex:facet name="start">
+<div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb;
+height: 100%;opacity:0.65;width:100%;">
+<div class="waitingHolder" style="top: 74.2px; width: 91px;">
+<img class="waitingImage" src="{!URLFOR($Resource.imageGallery,'/imageGallery/bootstrap/processing.gif')}" title="Please Wait..." />
+<span class="waitingDescription">Loading...</span>
+</div>
+</div>
+</apex:facet>
+</apex:actionstatus>
+</apex:outputpanel>
+</apex:component>

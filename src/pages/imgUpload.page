@@ -1,0 +1,61 @@
+<apex:page sidebar="false" showheader="false" standardstylesheets="false" controller="imgUpload" doctype="html-5.0">
+
+ <apex:stylesheet value="{!URLFOR($Resource.imageGallery,'/imageGallery/bootstrap/css/bootstrap2.css')}" />
+<apex:includeScript value="{!URLFOR($Resource.imageGallery,'/imageGallery/bootstrap/JS/jquery.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.imageGallery,'/imageGallery/bootstrap/JS/bootstrap.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.imageGallery,'/imageGallery/prettyPhoto/css/prettyPhoto.css')}" />
+ 
+
+
+<style>
+.form-control{
+ width:55%;
+}
+.glyphicon-cloud-upload {
+  content: "\e198";
+}
+</style>
+
+<script>
+$(document).ready(function(){
+   window.setTimeout(function(){
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+}, 5000); 
+ 
+});
+ </script>
+ 
+    <apex:outputpanel rendered="{!!isPageLoad}" layout="none">
+        <div class="alert {!IF(isError,'alert-danger','alert-success') } alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <apex:pagemessages />
+        </div>
+        </apex:outputpanel>
+        
+        <c:actionstatusNew />
+        
+        <apex:form id="frmId">
+              <!--  <div class="form-group">
+                 <apex:inputText styleclass="form-control" value="{!file.Name}"  html-placeholder="File Name" ></apex:inputText>
+              </div>-->
+              <div class="form-group">
+                   <apex:inputTextarea styleclass="form-control" value="{!file.Description}" html-placeholder="File Description"></apex:inputTextarea>
+              </div>
+              <div class="form-group input-group">
+                <!--<label for="exampleInputFile">File</label> 
+                 <span class="input-group-addon">File</span>-->
+                <apex:inputFile value="{!file.body}" fileName="{!file.Name}" accept="image/*"/>
+                <p class="help-block">Upload New File.</p>
+              </div>
+    
+     <apex:commandbutton action="{!upload}" value="upload" styleClass="Btn Btn-success" onclick="showOverLay();"></apex:commandbutton>
+</apex:form>
+
+<div style='padding:5%;'>
+  <c:gallery parentId="{!$CurrentPage.parameters.id}" hide="true"/>
+</div>
+
+
+</apex:page>

@@ -1,0 +1,48 @@
+<apex:component >
+<style>
+.loader{
+   display:none;
+ }
+.back{
+opacity: 0.5;
+filter: alpha(opacity=50);
+position: fixed;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+z-index: 1030;
+background-color: #000000;
+}
+.preloader{
+    margin: 20% auto;
+    margin-left: 40%;
+    position: absolute;
+    display:none;
+   } 
+.processText{
+    position: absolute;
+    background-position: 15px;
+    margin-top: 21px;
+    margin-left: 8px;
+    font-weight: bold;
+  }  
+</style>
+
+<script>
+  function showOverLay(){
+    $(".loader").show();
+  }
+   function hideOverLay(){
+      $(".loader").hide();
+  }
+</script>
+
+<div class="back loader" ></div>
+<div class='loader preloader'  align="center">
+<div class='processText'>processing.</div>
+<img src="{!URLFOR($Resource.imageGallery,'/imageGallery/bootstrap/processing.gif')}" alt="processing ... please  wait ..." />
+</div>
+ 
+ 
+</apex:component>
