@@ -1,0 +1,367 @@
+<apex:page controller="Example_Basic">
+<apex:pagemessages ></apex:pagemessages>
+<apex:includeScript value="{!URLFOR($Resource.Ex_jquery)}"/>
+  <style>
+.reclab{
+    display:block;
+    
+    text-align:right;
+    font-size:11px;
+    font-weight:bold;
+    color: #333;
+}
+.black_overlay{
+display: none;
+position: absolute;
+top: 0%;
+left: 0%;
+width: 100%;
+height: 100%;
+background-color: black;
+z-index:1001;
+-moz-opacity: 0.8;
+opacity:.40;
+filter: alpha(opacity=80);
+}
+.white_content {
+display: none;
+position: absolute;
+text-align: center;
+top: 30%;
+left: 47%;
+/*width: 15%;
+height: 10%;*/
+padding: 16px;
+background-color: white;
+z-index:1002;
+overflow: auto;
+border-radius:20px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border:1px solid #000;
+} 
+</style>
+<script type="text/javascript">
+
+
+jQuery=$.noConflict();
+function processing(){
+     jQuery("#light").attr('style','display:none');
+      jQuery("#fade").attr('style','display:none');
+ }
+ 
+function process()
+{
+var amount=jQuery.trim(jQuery(".amount").val());
+
+
+var fname=jQuery.trim(jQuery(".fname").val());
+var lname=jQuery.trim(jQuery(".lname").val());
+var cardname=jQuery.trim(jQuery(".cardname").val());
+
+var cardnumber=jQuery.trim(jQuery(".cardnumber").val());
+var cardnumberlen=cardnumber.length;
+var cvv=jQuery.trim(jQuery(".cvv").val());
+var cvvlen=cvv.length;
+var exm=jQuery(".exm").val();
+
+
+
+
+
+
+var reg_name=/^([a-zA-Z0-9\.\,\#\&\-\'\ ])+$/;
+var reg_credit=/^([0-9])+$/;
+var condition=0;
+
+if(amount=='' )
+{
+
+condition=1;
+ 
+                   alert("Please enter valid data in Amount $");
+                      jQuery(".amount").focus();
+                      return false;
+                      
+}
+else if(amount!='')
+{
+
+
+if(isNaN(amount))
+{
+condition=1;
+ 
+                   alert("Plese enter number or decimal values in Amount $ ");
+                      jQuery(".amount").focus();
+                      return false;
+}
+else if(amount<0 || amount<0.0)
+{
+condition=1;
+ 
+                   alert("Amount $ mustnot be less than zero");
+                      jQuery(".amount").focus();
+                      return false;
+}
+}
+if(fname=='')
+{
+condition=1;
+ 
+                   alert("Please enter a Value in First Name ");
+                      jQuery(".fname").focus();
+                      return false;
+} 
+else if(fname!='' && !reg_name.test(fname))
+{
+condition=1;
+ 
+                   alert("Please enter Valid data in First Name ");
+                      jQuery(".fname").focus();
+                      return false;
+}
+if(lname=='')
+{
+condition=1;
+ 
+                   alert("Please enter a Value in Last Name ");
+                      jQuery(".lname").focus();
+                      return false;
+} 
+else if(lname!='' && !reg_name.test(lname))
+{
+condition=1;
+ 
+                   alert("Please enter Valid data in Last Name ");
+                      jQuery(".lname").focus();
+                      return false;
+                      }
+   if(cardname=='')
+  {
+  condition=1;
+  alert("Please enter value in  Name on Card");
+                      jQuery(".cardname").focus();
+                      return false;
+  }          
+else if(cardname!='' && !reg_name.test(cardname))
+{
+condition=1;
+  alert("Please enter valid data  Name on Card");
+                      jQuery(".cardname").focus();
+                      return false;
+}
+else if(cardname.length<2)
+{
+condition=1;
+  alert("Name on Card Must contain atlease two characters");
+                      jQuery(".cardname").focus();
+                      return false;
+}
+         
+if(cardnumber=='')
+{
+condition=1;
+ 
+                   alert("Please enter Value in Credit Card Number");
+                      jQuery(".cardnumber").focus();
+                      return false;
+}
+else if(cardnumber!='')
+{
+if(!reg_credit.test(cardnumber))
+{
+condition=1;
+ 
+                   alert("Please enter numbers only in Credit Card Number");
+                      jQuery(".cardnumber").focus();
+                      return false;
+}
+if(cardnumberlen<15)
+{
+condition=1;
+ 
+                   alert("Credit Card Number Must Contain Atleast 15 digits");
+                      jQuery(".cardnumber").focus();
+                      return false;
+}
+}
+if(cvv!='')
+{
+if(!reg_credit.test(cvv))
+{
+condition=1;
+ 
+                   alert("Please numbers only in Card Verification (CVV) ");
+                      jQuery(".cvv").focus();
+                      return false;
+}
+if(cvvlen<3)
+{
+condition=1;
+ 
+                   alert(" Card Verification (CVV) Must Contain atleast 3 numbers");
+                      jQuery(".cvv").focus();
+                      return false;
+}
+}
+if(isNaN(exm))
+{
+condition=1;
+ 
+                   alert("Please Select Month from Expiration Date");
+                      jQuery(".exm").focus();
+                      return false;
+}
+
+                  if(condition == 0){
+                   jQuery("#light").attr('style','display:block');
+                   jQuery("#fade").attr('style','display:block');
+                    return true;
+                  }else{
+                  return false;
+                  }
+}
+</script>
+
+<apex:form >
+
+<apex:pageBlock >
+<apex:pageblockButtons >
+   <apex:commandButton value="Process" action="{!process}"  reRender="SeeResult,Seexml" onclick="if(!process()){return false;}"  oncomplete="processing();" disabled="{!error}"/>
+   </apex:pageblockButtons>
+<b>Example 1</b> <br /><br />
+
+  <div id="light" class="white_content">   
+                <apex:image value="{!URLFOR($Resource.Ex_LoaderImage)}" title="we are processing your request. please wait..." style="height: 15px;"  /><br/>
+               <apex:outputlabel value="we are processing your request. please wait...                  "/>
+              
+         </div>
+         <div id="fade" class="black_overlay"></div>
+<apex:pageBlockSection title="Basic example" collapsible="false" columns="1">
+ 
+<apex:Repeat value="{!cnpxmlstring.ItemsList}" var="item" id="ItemList">
+    <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Amount $"/>
+       <apex:outputPanel styleClass="requiredInput" layout="block"   >
+       
+                       <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+      <apex:inputText value="{!item.UnitPrice}" styleClass="amount" maxlength="7" />
+      </apex:outputpanel>
+      </apex:pageBlockSectionItem>
+      </apex:Repeat>
+      Personal Information
+      <apex:pageBlockSectionItem >
+   <apex:outputLabel value="First Name" />
+    <apex:outputPanel styleClass="requiredInput" layout="block"   >
+       
+                       <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!BillingInfo.BillingFirstName}" maxlength="50" styleClass="fname"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Last Name" />
+    <apex:outputPanel styleClass="requiredInput" layout="block"   >
+       
+                       <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!BillingInfo.BillingLastName}" maxlength="50" styleClass="lname"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   Payment Information
+    <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Name on Card" />
+    <apex:outputPanel styleClass="requiredInput" layout="block"   >
+       
+                       <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!PaymentMethod.NameOnCard}" styleClass="cardname" maxlength="50"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Credit Card Number" />
+    <apex:outputPanel styleClass="requiredInput" layout="block"   >
+       
+                       <apex:outputPanel styleClass="requiredBlock" layout="block" />
+   <apex:inputText value="{!PaymentMethod.CardNumber}" maxlength="16" styleClass="cardnumber"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Card Verification (CVV)" />
+   <apex:inputText value="{!PaymentMethod.Cvv2}" maxlength="4" styleClass="cvv"/>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Expiration Date" />
+   
+   <apex:outputPanel >
+    <apex:outputPanel styleClass="requiredInput" layout="block"   >
+       
+                       <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                       
+   <apex:selectlist value="{!PaymentMethod.ExpirationMonth}" size="1" styleclass="exm" >             
+              <apex:selectOptions value="{!cnpxmlstring.ExpireMonth}"/>
+          </apex:selectlist>
+    <apex:selectlist value="{!PaymentMethod.ExpirationYear}" size="1" >             
+              <apex:selectOptions value="{!cnpxmlstring.ExpireYear}" />
+          </apex:selectlist> 
+          </apex:outputpanel>     
+    </apex:outputPanel>      
+   </apex:pageBlockSectionItem>
+
+  <!--
+<apex:pageBlockSectionItem >
+   <apex:outputlabel ></apex:outputlabel>
+   <apex:outputPanel id="Seexml" >
+   
+   
+   <apex:inputcheckbox value="{!cnpxmlstring.Verifyxmlfile}" />
+   <apex:outputLabel value="Display the XML for verification without submitting to the PaaS web services." /><br /><br />
+   <apex:outputPanel rendered="{!cnpxmlstring.Verifyxmlfile==true}">
+   <apex:outputText value="{!cnpxmlstring.xmlfile}"></apex:outputText>
+   
+   </apex:outputPanel>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+  -->
+  
+  
+       
+
+        
+   </apex:pageBlockSection>
+   <apex:outputPanel id="SeeResult">
+   <apex:pageBlockSection rendered="{!IF(cnpxmlstring.TransactionResultCode==0,true,false)}" columns="1">
+   
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="PROCESSING RESULTS" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Trasaction status" />
+   <apex:outputtext value="{!cnpxmlstring.ErrorData}" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Order number" />
+   <apex:outputtext value="{!cnpxmlstring.TransactionNumber}" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="VaultGUID" />
+   <apex:outputtext value="{!cnpxmlstring.VaultGUID}" />
+   </apex:pageBlockSectionItem>
+  
+   </apex:pageBlockSection>
+   <apex:pageBlockSection rendered="{!IF(cnpxmlstring.TransactionResultCode!=0,true,false)}" columns="1">
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="PROCESSING RESULTS" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Trasaction status" />
+   <apex:outputtext value="{!cnpxmlstring.ErrorData}" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Additional information" />
+   <apex:outputtext value="{!cnpxmlstring.AdditionalInfo}" />
+   </apex:pageBlockSectionItem>
+   </apex:pageBlockSection>
+   </apex:outputPanel>
+</apex:pageBlock>
+</apex:form>  
+</apex:page>

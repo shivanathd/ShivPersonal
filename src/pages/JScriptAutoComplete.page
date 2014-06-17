@@ -1,0 +1,48 @@
+<apex:page >
+<head>
+<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, '/jquery-1.9.1.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.JQuery_Demo, '/jquery-ui-1.10.3.custom.js')}"/>
+
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  
+  <script>
+  $(function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  });
+  </script>
+
+</head>
+<body> 
+<div class="ui-widget">
+  <label for="tags">Tags: </label>
+  <input id="tags" />
+</div>
+ </body>
+ 
+</apex:page>

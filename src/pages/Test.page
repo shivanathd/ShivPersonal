@@ -1,0 +1,6 @@
+<apex:page showHeader="false" standardController="account" sidebar="false">
+  <h3> Welcome to the Kerala Meetup</h3>
+  <apex:form >
+  <apex:inputField id="att" value="{!Account.Ownerid}"/>
+  </apex:form>
+</apex:page>

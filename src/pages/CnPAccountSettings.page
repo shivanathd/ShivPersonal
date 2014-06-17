@@ -1,0 +1,133 @@
+<apex:page controller="CnPAccountSettings" title="CP Account Information:Home">
+<apex:sectionHeader title="C&P " subtitle="Account Information"/>
+
+<apex:includeScript value="{!URLFOR($Resource.Ex_jquery)}"/>
+<style>
+.reclab{
+    display:block;
+    
+    text-align:right;
+    font-size:11px;
+    font-weight:bold;
+    color: #333;
+}
+.black_overlay{
+display: none;
+position: absolute;
+top: 0%;
+left: 0%;
+width: 100%;
+height: 100%;
+background-color: black;
+z-index:1001;
+-moz-opacity: 0.8;
+opacity:.40;
+filter: alpha(opacity=80);
+}
+.white_content {
+display: none;
+position: absolute;
+top: 30%;
+left: 47%;
+/*width: 2%;
+height: 4%;*/
+padding: 16px;
+background-color: white;
+z-index:1002;
+overflow: auto;
+border-radius:20px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border:1px solid #000;
+} 
+</style>  
+<script type="text/javascript">
+
+jQuery=$.noConflict();
+function processing(){
+     jQuery("#light").attr('style','display:none');
+      jQuery("#fade").attr('style','display:none');
+ }
+ function process()
+{
+var accountnum=jQuery.trim(jQuery(".accountnum").val());
+var accountguid=jQuery.trim(jQuery(".accountguid").val());
+var reg_accountnum=/^([0-9])+$/;
+var condition=0;
+
+if(accountnum=='')
+{
+condition=1;
+ 
+                   alert("Please enter valid data in C&P Account Number ");
+                      jQuery(".accountnum").focus();
+                      return false;
+}
+else if(accountnum!=''&& !reg_accountnum.test(accountnum))
+{
+condition=1;
+ 
+                   alert("Please enter numerics only in  C&P Account Number ");
+                      jQuery(".accountnum").focus();
+                      return false;
+}
+if(accountguid=='')
+{
+condition=1;
+ 
+                   alert("Please enter valid data in  C&P Account GUID ");
+                      jQuery(".accountguid").focus();
+                      return false;
+}
+ if(condition == 0){
+                  jQuery("#light").attr('style','display:block');
+                   jQuery("#fade").attr('style','display:block');
+                    return true;
+                  }else{
+                  return false;
+                  }
+} 
+ </script> 
+<apex:form >
+ <apex:pageMessages />
+
+ <apex:pageblock >
+ <div id="light" class="white_content">                      
+               <apex:image value="{!URLFOR($Resource.Ex_LoaderImage)}" title="Processing..." style="height: 15px;"/>
+                        <apex:outputlabel value="we are processing your request. please wait...                  "/>
+
+         </div>
+ <div id="fade" class="black_overlay"></div>
+ <apex:pageBlockSection columns="1" >
+
+ <apex:pageBlockSectionItem >
+<apex:outputLabel value="C&P Account Number"></apex:outputLabel>
+   <apex:outputPanel styleClass="requiredInput" layout="block"   > 
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+ <apex:inputText value="{!SettingRec.C_P_Account_Number__c }" styleClass="accountnum"/>
+ </apex:outputPanel>
+ </apex:pageBlockSectionItem>
+
+
+ <apex:pageBlockSectionItem >
+ <apex:outputLabel value="C&P Account GUID"> </apex:outputLabel>
+ <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/> 
+ <apeX:inputText value="{!SettingRec.C_P_AccountGUID__c}" size="40" styleclass="accountguid"/>
+</apex:outputPanel>
+
+ </apex:pageBlockSectionItem>
+
+ <!--<apex:pageBlockSectionItem >
+ <apex:outputLabel value="WID"></apex:outputLabel>
+ <apex:inputField value="{!SettingRec.WID__c}"/>
+ </apex:pageBlockSectionItem>-->
+ <apex:pageBlockSectionItem >
+   <apex:outputlabel ></apex:outputlabel>
+   <apex:commandButton value="Save" action="{!Save}" onclick="if(!process()){return false;}" /> 
+   
+   </apex:pageBlockSectionItem>
+ </apex:pageBlockSection>
+ </apex:pageblock>
+ </apex:form> 
+</apex:page>

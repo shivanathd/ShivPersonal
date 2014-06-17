@@ -1,0 +1,679 @@
+<apex:page controller="Example_Multiple_Radio_buttons">
+<apex:pageMessages ></apex:pageMessages>
+ <apex:includeScript value="{!URLFOR($Resource.Ex_jquery)}"/>
+ <style>
+.reclab{
+    display:block;
+    
+    text-align:right;
+    font-size:11px;
+    font-weight:bold;
+    color: #333;
+}
+.black_overlay{
+display: none;
+position: absolute;
+top: 0%;
+left: 0%;
+width: 100%;
+height: 100%;
+background-color: black;
+z-index:1001;
+-moz-opacity: 0.8;
+opacity:.40;
+filter: alpha(opacity=80);
+}
+.white_content {
+display: none;
+position: absolute;
+top: 30%;
+left: 47%;
+/*width: 2%;
+height: 4%;*/
+padding: 16px;
+background-color: white;
+z-index:1002;
+overflow: auto;
+border-radius:20px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border:1px solid #000;
+} 
+.blockelements {
+    display:block;
+    font-size:11px;
+    margin-left:100px;
+}
+.blockelements .requiredInput{
+float:left;
+}
+.blockelements input[type="text"]{
+    margin-top:5px;
+} 
+.blocktitle {
+border-bottom:1px solid #ccc;
+    display:block;
+    margin-top:10px;
+    padding:5px 5px 10px 0px;
+    font-size:12px;
+    font-weight:bold;
+    clear:both;
+} 
+
+</style>   
+<script type="text/javascript">
+
+jQuery=$.noConflict();
+function processing(){
+     jQuery("#light").attr('style','display:none');
+      jQuery("#fade").attr('style','display:none');
+ }
+
+function process()
+{
+
+
+var installments=jQuery.trim(jQuery(".installments").val());
+
+var fname=jQuery.trim(jQuery(".fname").val());
+var lname=jQuery.trim(jQuery(".lname").val());
+var cardnumber=jQuery.trim(jQuery(".cardnumber").val());
+var cardnumberlen=cardnumber.length;
+var cvv=jQuery.trim(jQuery(".cvv").val());
+var cvvlen=cvv.length;
+var exm=jQuery(".exm").val();
+var phone=jQuery.trim(jQuery(".phone").val());
+var phonelen=phone.length;
+var email=jQuery.trim(jQuery(".email").val());
+var address1=jQuery.trim(jQuery(".address1").val());
+var address2=jQuery.trim(jQuery(".address2").val());
+var city=jQuery.trim(jQuery(".city").val());
+var province=jQuery.trim(jQuery(".province").val());
+var postalcode=jQuery.trim(jQuery(".postalcode").val());
+var billingstatecode=jQuery.trim(jQuery(".billingstatecode").val());
+var billingcountrycode=jQuery.trim(jQuery(".billingcountrycode").val());
+
+var cardname=jQuery.trim(jQuery(".cardname").val());
+
+var reg_name=/^([a-zA-Z0-9\.\,\#\&\-\'\ ])+$/;
+var reg_phone=/^([0-9\.\-\(\)\+\ ])+$/;
+var reg_credit=/^([0-9])+$/;
+var reg_email=/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+var reg_city=/^([a-zA-Z0-9\.\,\&\-\'\ ])+$/;
+var reg_postalcode=/^([a-zA-Z0-9\.\-\ ])+$/;
+var condition=0;
+
+var rowvalue=jQuery(".rowvalues").val();
+
+for(var i=0;i<rowvalue;i++)
+{ 
+      
+      var amount=jQuery(".amount"+i).val();
+   
+        var pt;
+                      
+                       var ra=0;
+                       var cr=0;
+                       jQuery(".items"+i+" input:radio").each(function(){
+                            cr=1;  
+                          
+                            if(jQuery(this).is(':checked')==true)
+                            {
+                                pt = jQuery(this).val();
+                                
+                                ra=1;
+                            }   
+                      
+                       })
+                       
+                
+                       if(ra==0 && cr==1)
+                       {
+                               var itemname=jQuery('.itemname'+i).text();
+                             
+                               alert("Please select at least one radiobutton of the "+itemname);
+                               return false;
+                       }   
+              
+                   if(pt=='0.0')
+                   {
+        
+                    if(amount=='' || amount == '0.0' || amount == '0')   
+                       {
+                            var itemname=jQuery('.itemname'+i).text();
+                       
+                               alert("Please enter valid amount @ "+itemname);
+                               jQuery(".amount"+i).focus();
+                               return false;
+                       }
+                       
+                  else if(amount<=0 || amount<=0.0)
+                  {
+                  
+                   var itemname=jQuery('.itemname'+i).text();
+                             alert("Please enter a valid Amount @ "+itemname);
+                               jQuery(".amount"+i).focus();
+                               return false;
+                  }
+                      
+                  }     
+                          
+
+}
+
+if(installments=='')
+{
+condition=1;
+ 
+                   alert("Please enter a Value in # of Installments");
+                      jQuery(".installments").focus();
+                      return false;
+}
+else if(installments!='')
+{
+if(!reg_credit.test(installments))
+{
+condition=1;
+ 
+                   alert("Please enter integer values only in # of Installments");
+                      jQuery(".installments").focus();
+                      return false;
+}
+else if(installments<=1 || installments>999)
+{
+condition=1;
+ 
+                   alert(" # of Installments must be greater than 1");
+                      jQuery(".installments").focus();
+                      return false;
+}
+}
+if(fname=='')
+{
+condition=1;
+ 
+                   alert("Please enter a Value in First Name ");
+                      jQuery(".fname").focus();
+                      return false;
+} 
+else if(fname!='' && !reg_name.test(fname))
+{
+condition=1;
+ 
+                   alert("Please enter Valid data in First Name ");
+                      jQuery(".fname").focus();
+                      return false;
+}
+if(lname=='')
+{
+condition=1;
+ 
+                   alert("Please enter a Value in Last Name ");
+                      jQuery(".lname").focus();
+                      return false;
+} 
+else if(lname!='' && !reg_name.test(lname))
+{
+condition=1;
+ 
+                   alert("Please enter Valid data in Last Name ");
+                      jQuery(".lname").focus();
+                      return false;
+                      }
+    if(phonelen!='')
+    {
+    if(!reg_phone.test(phone))
+    {
+    condition=1;
+ 
+                   alert("Please enter Valid data in Phone");
+                      jQuery(".phone").focus();
+                      return false;
+    }
+    else if(phonelen<10)
+    {
+    condition=1;
+ 
+                   alert("Phone Must Contain atleat 10 numbers");
+                      jQuery(".phone").focus();
+                      return false;
+    }
+    }                 
+  if(email!='' &&!reg_email.test(email))
+  {
+  condition=1;
+ 
+                   alert("Please enter a valid email address");
+                      jQuery(".email").focus();
+                      return false;
+  }     
+  if(address1!='')
+  {
+  if(!reg_name.test(address1))
+  {
+   condition=1;
+ 
+                   alert("Please enter valid data in Billing Address1");
+                      jQuery(".address1").focus();
+                      return false;
+ 
+  }
+  else if(address1.length < 2)
+  {
+   condition=1;
+ 
+                   alert("Billing Address1 must contain atlease 2 characters");
+                      jQuery(".address1").focus();
+                      return false;
+   }
+  }
+  if(address2!='')
+  {
+  if(!reg_name.test(address2))
+  {
+   condition=1;
+ 
+                   alert("Please enter valid data in Billing Address2");
+                      jQuery(".address2").focus();
+                      return false;
+ 
+  }
+  else if(address2.length < 2)
+  {
+   condition=1;
+ 
+                   alert("Billing Address2 must contain atlease 2 characters");
+                      jQuery(".address2").focus();
+                      return false;
+ 
+  }
+  } 
+  if(city!='')
+  {
+  if(!reg_city.test(city))
+  {
+  condition=1;
+  alert("Please enter valid data in Billing City");
+                      jQuery(".city").focus();
+                      return false;
+  }
+  else if(city.length < 2)
+  {
+  condition=1;
+  alert("Billing City Must contain atleast two characters");
+                      jQuery(".city").focus();
+                      return false;
+  }
+  } 
+ if(province!='')
+ {
+ if(!reg_city.test(province))
+  {
+  condition=1;
+  alert("Please enter valid data in Billing Province(non-US)");
+                      jQuery(".province").focus();
+                      return false;
+  }
+  else if(province.length < 2)
+  {
+  condition=1;
+  alert("Billing Province(non-US) Must contain atleast two characters");
+                      jQuery(".province").focus();
+                      return false;
+  }
+ }             
+
+ if(postalcode!='' && !reg_postalcode.test(postalcode))
+  {
+  condition=1;
+  alert("Please enter valid data in Billing Zip/PostalCode");
+                      jQuery(".postalcode").focus();
+                      return false;
+  }
+  
+  if(billingcountrycode=='840' && billingstatecode=='')
+     {
+          condition=1;
+          alert("Please select State from the Billing State picklist");
+      jQuery(".billingstatecode").focus();
+            return false;
+     
+     }
+     
+     
+   else if(billingcountrycode!='840' && province=='')
+     {
+          condition=1;
+          alert("Please enter a value in Billing Province(non-US) ");
+      jQuery(".province").focus();
+            return false;
+          }
+    
+  
+  if(cardname=='')
+  {
+  condition=1;
+  alert("Please enter value in  Name on Card");
+                      jQuery(".cardname").focus();
+                      return false;
+  }          
+else if(cardname!='' && !reg_name.test(cardname))
+{
+condition=1;
+  alert("Please enter valid data  Name on Card");
+                      jQuery(".cardname").focus();
+                      return false;
+}
+
+else if(cardname.length<2)
+{
+condition=1;
+  alert("Name on Card must contain atleast two characters");
+                      jQuery(".cardname").focus();
+                      return false;
+}
+                 
+if(cardnumber=='')
+{
+condition=1;
+ 
+                   alert("Please enter Value in Credit Card Number");
+                      jQuery(".cardnumber").focus();
+                      return false;
+}
+else if(cardnumber!='')
+{
+if(!reg_credit.test(cardnumber))
+{
+condition=1;
+ 
+                   alert("Please enter numbers only in Credit Card Number");
+                      jQuery(".cardnumber").focus();
+                      return false;
+}
+if(cardnumberlen<15)
+{
+condition=1;
+ 
+                   alert("Credit Card Number Must Contain Atleast 15 digits");
+                      jQuery(".cardnumber").focus();
+                      return false;
+}
+}
+if(cvv!='')
+{
+if(!reg_credit.test(cvv))
+{
+condition=1;
+ 
+                   alert("Please numbers only in Card Verification (CVV) ");
+                      jQuery(".cvv").focus();
+                      return false;
+}
+if(cvvlen<3)
+{
+condition=1;
+ 
+                   alert(" Card Verification (CVV) Must Contain atlease\t 3 numbers");
+                      jQuery(".cvv").focus();
+                      return false;
+}
+}
+if(isNaN(exm))
+{
+condition=1;
+ 
+                   alert("Please Select Month from Expiration Date");
+                      jQuery(".exm").focus();
+                      return false;
+}
+
+                  if(condition == 0){
+                  jQuery("#light").attr('style','display:block');
+                   jQuery("#fade").attr('style','display:block');
+                    return true;
+                  }else{
+                  return false;
+                  }
+}
+
+ function DisplayTextBox(id,value)
+ {
+     if(value=='0.0')
+     {
+        jQuery('.DisplayTextBox'+id).attr('style','display:block');
+        jQuery('.amount'+id).val(''); 
+        
+     }
+ }
+</script>
+
+ <apex:form id="theform" >
+<apex:pageBlock >
+<apex:pageBlockButtons >
+   <apex:commandButton value="Process" action="{!process}"  reRender="SeeResult,Seexml,theform" onclick="if(!process()){return false;}" oncomplete="processing();" disabled="{!error}"/>
+</apex:pageBlockButtons>
+<b>Example 8 </b> <br /><br />
+<div id="light" class="white_content">                      
+               <apex:image value="{!URLFOR($Resource.Ex_LoaderImage)}" title="Processing..." style="height: 15px;"/>
+                        <apex:outputlabel value="we are processing your request. please wait...                  "/>
+
+         </div>
+ <div id="fade" class="black_overlay"></div>
+<apex:pageBlockSection title="Form with multiple radio buttons with recurring" collapsible="false" columns="1">
+ <apex:outputPanel id="itemslist" >
+
+ <apex:variable value="0" var="rowNum"/> 
+ 
+
+    <apex:Repeat value="{!items}" var="item" id="ItemList" >
+   
+        <apex:pageBlockSectionItem ><apex:outputpanel styleclass="blocktitle" >Support the 
+            <b><apex:outputText value="{!item.ItemName}" styleClass="itemname{!rowNum}" ></apex:outputText></b></apex:outputpanel>     
+        </apex:pageBlockSectionItem>
+        
+    
+       <apex:pageBlockSectionItem > 
+          <apex:outputpanel styleclass="blockelements" >
+       
+               <apex:outputPanel styleClass="requiredInput" layout="block"   >
+                <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                  <apex:selectRadio value="{!item.UnitPrice}" styleClass="items{!rowNum}" style="margin-right:10px;"> <!--onchange="DisplayTextBox({!rowNum},this.value);" > -->
+                      <apex:selectOptions value="{!Amounts}"/>
+                       <apex:actionSupport event="onchange" reRender="DisplayTextBox,itemslist"/>
+                   </apex:selectRadio>
+                </apex:outputpanel>
+               
+             <apex:outputPanel id="DisplayTextBox">     
+              
+                 <apex:outputPanel styleClass="DisplayTextBox{!rowNum}" rendered="{!if(item.UnitPrice==0.0,true,false)}"  >$
+                 
+                     <apex:inputText value="{!item.UnitPrice}" styleClass="amount{!rowNum}" maxlength="7" size="7"/>
+                  
+                 </apex:outputPanel>
+               
+             </apex:outputPanel>
+         </apex:outputpanel>
+      </apex:pageBlockSectionItem> 
+  
+          <apex:variable var="rowNum" value="{!VALUE(rowNum) + 1}"/>
+     
+     
+     
+   </apex:Repeat>
+ 
+        <input type="hidden" value="{!rowNum}" class="rowvalues" name="rowvalues"/>      
+      </apex:outputPanel>          
+      Recurring information:
+      <apex:pageBlockSectionItem >
+   <apex:outputLabel value="# of Installments" />
+   <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!cnptransaction.Installment}" styleClass="installments" maxlength="3"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Periodicity" />
+   <apex:selectlist value="{!cnptransaction.Periodicity}" size="1">             
+              <apex:selectOptions value="{!cnpxmlstring.Periodicity}"/>
+          </apex:selectlist>
+   </apex:pageBlockSectionItem>
+      
+   Personal Information
+      <apex:pageBlockSectionItem >
+   <apex:outputLabel value="First Name" /> 
+   <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!BillingInfo.BillingFirstName}" styleClass="fname" maxlength="50"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Last Name" />
+   <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!BillingInfo.BillingLastName}" styleClass="lname" maxlength="50"/>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Phone " />
+   <apex:inputText value="{!BillingInfo.BillingPhone}" styleClass="phone" maxlength="50"/>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Email" />
+   <apex:inputText value="{!BillingInfo.BillingEmail}" styleClass="email" maxlength="50"/>
+   </apex:pageBlockSectionItem>
+   Billing Information
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Address1" />
+   <apex:inputText value="{!BillingAddress.BillingAddress1}" styleClass="address1" maxlength="100"/>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Address2" />
+   <apex:inputText value="{!BillingAddress.BillingAddress2}" styleClass="address2" maxlength="100"/>
+   </apex:pageBlockSectionItem>
+   
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="City" />
+   <apex:inputText value="{!BillingAddress.BillingCity}" styleClass="city" maxlength="50"/>
+   </apex:pageBlockSectionItem>
+   
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Zip/Postal Code" />
+   <apex:inputText value="{!BillingAddress.BillingPostalCode}" styleClass="postalcode" maxlength="20"/>
+   </apex:pageBlockSectionItem>
+  <apex:pageBlockSection id="refreshblock">
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Country" />
+   
+   <apex:selectlist value="{!BillingAddress.BillingCountryCode}" size="1" styleClass="billingcountrycode">             
+                <apex:actionSupport event="onchange" reRender="refreshblock"/>                
+   
+              <apex:selectOptions value="{!cnpxmlstring.CountryCodes}"/>
+          </apex:selectlist>
+   </apex:pageBlockSectionItem><br/>
+   <apex:pageBlockSectionItem rendered="{!if(BillingAddress.BillingCountryCode=='840',true,false)}" >
+
+     <apex:outputLabel value="State" />
+    
+   <apex:selectlist value="{!BillingAddress.BillingStateProvince}" size="1" styleClass="billingstatecode" > 
+              <apex:selectOptions value="{!cnpxmlstring.UsStates}"/>
+          </apex:selectlist>
+   </apex:pageBlockSectionItem> 
+   <apex:pageBlockSectionItem rendered="{!if(BillingAddress.BillingCountryCode!='840',true,false)}" >
+   <apex:outputLabel value="Province(non-US)" />
+   <apex:inputText value="{!BillingAddress.BillingStateProvince}" styleClass="province" maxlength="50"/>
+   </apex:pageBlockSectionItem>
+   </apex:pageBlockSection>
+   
+   Payment Information
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Name on Card" />
+   <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!PaymentMethod.NameOnCard}" styleClass="cardname" maxlength="50"/>
+   </apex:outputPanel>   
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Credit Card Number" />
+   <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:inputText value="{!PaymentMethod.CardNumber}" styleClass="cardnumber" maxlength="16"/>
+   </apex:outputPanel>   
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Card Verification (CVV) " />
+   <apex:inputText value="{!PaymentMethod.Cvv2}" styleClass="cvv" maxlength="4"/>
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputLabel value="Expiration Date" />
+   
+   <apex:outputPanel >
+   <apex:outputPanel styleClass="requiredInput" layout="block"   >
+      <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+   <apex:selectlist value="{!PaymentMethod.ExpirationMonth}" size="1" styleclass="exm">             
+              <apex:selectOptions value="{!cnpxmlstring.ExpireMonth}"/>
+          </apex:selectlist>
+    <apex:selectlist value="{!PaymentMethod.ExpirationYear}" size="1">             
+              <apex:selectOptions value="{!cnpxmlstring.ExpireYear}"/>
+          </apex:selectlist>      
+    </apex:outputPanel> 
+         </apex:outputPanel>   
+   </apex:pageBlockSectionItem>
+ 
+  <!-- <apex:pageBlockSectionItem >
+   <apex:outputlabel ></apex:outputlabel>
+   <apex:outputPanel id="Seexml" >
+   
+   
+   <apex:inputcheckbox value="{!cnpxmlstring.Verifyxmlfile}" />
+   <apex:outputLabel value="Display the XML for verification without submitting to the PaaS web services." /><br /><br />
+   <apex:outputPanel rendered="{!cnpxmlstring.Verifyxmlfile==true}">
+   <apex:outputText value="{!cnpxmlstring.xmlfile}"></apex:outputText>
+   
+   </apex:outputPanel>
+   </apex:outputpanel>
+   </apex:pageBlockSectionItem> -->
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel ></apex:outputlabel>
+   <!--<apex:commandButton value="Process" action="{!process}"  reRender="SeeResult,Seexml" onclick="if(!process()){return false;}" oncomplete="processing();" disabled="{!error}"/>-->
+   
+   </apex:pageBlockSectionItem>
+   </apex:pageBlockSection>
+   <apex:outputPanel id="SeeResult">
+   <apex:pageBlockSection rendered="{!IF(cnpxmlstring.TransactionResultCode==0,true,false)}" columns="1">
+   
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="PROCESSING RESULTS" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Trasaction status" />
+   <apex:outputtext value="{!cnpxmlstring.ErrorData}" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Order number" />
+   <apex:outputtext value="{!cnpxmlstring.TransactionNumber}" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="VaultGUID" />
+   <apex:outputtext value="{!cnpxmlstring.VaultGUID}" />
+   </apex:pageBlockSectionItem>
+  
+   </apex:pageBlockSection>
+   <apex:pageBlockSection rendered="{!IF(cnpxmlstring.TransactionResultCode!=0,true,false)}" columns="1">
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="PROCESSING RESULTS" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Trasaction status" />
+   <apex:outputtext value="{!cnpxmlstring.ErrorData}" />
+   </apex:pageBlockSectionItem>
+   <apex:pageBlockSectionItem >
+   <apex:outputlabel value="Additional information" />
+   <apex:outputtext value="{!cnpxmlstring.AdditionalInfo}" />
+   </apex:pageBlockSectionItem>
+   </apex:pageBlockSection>
+   </apex:outputPanel>       
+</apex:pageBlock>
+</apex:form>      
+</apex:page>
