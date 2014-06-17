@@ -9,6 +9,7 @@
         serverurl="${sf.serverurl}" 
         runAllTests="true"
         logType="Detail"
+        deployRoot="src"
         checkOnly="true" maxPoll="1500" />
     </target>
 
